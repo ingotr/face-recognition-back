@@ -57,7 +57,22 @@ app.get('/profile/:id', (req, res) => {
   database.users.forEach(user => {
     if(user.id === id) {
       found = true;
-      res.json(user);
+      return res.json(user);
+    }
+  })
+  if(!found) {
+    res.status(400).json('not found');
+  }
+})
+
+app.post('/image', (req, res) => {
+  const {id} = req.body;
+  let found = false;
+  database.users.forEach(user => {
+    if(user.id === id) {
+      found = true;
+      user.entries++;
+      return res.json(user.entries);
     }
   })
   if(!found) {
@@ -69,10 +84,3 @@ app.listen(3000, () => {
   console.log('app is running on port 3000');
 })
 
-/*
-/ -- > res
-/signin --> POST = success
-/register --> POST = user
-/profile/:userId --> GET
-/image --> PUT --> user
-*/

@@ -20,59 +20,27 @@ const db = knex({
   }
 });
 
-db.select('*').from('users').then(data => {
-  console.log(data);
-});
-
-const database = {
-  users: [
-    {
-      id: '123',
-      name: 'John',
-      email: 'john@gmail.com',
-      password: 'cookies',
-      entries: 0,
-      joined: new Date()
-    },
-    {
-      id: '124',
-      name: 'sally',
-      email: 'sally@gmail.com',
-      password: 'bananas',
-      entries: 0,
-      joined: new Date()
-    }
-  ],
-  logi: [
-    {
-      id: '987',
-      hash: '',
-      email: 'john@gmail.com'
-    }
-  ]
-}
-
 app.get('/', (req, res) => {
   res.send(database.users);
 })
 
 app.post('/signin', (req, res) => {
-  bcrypt.compare("apples",
-    "$2b$10$pXtoZ2g.MbkzpInNvJdgY.bP0WWwxZEcJIC0BFvbVEnhzB4gkHayW",
-    function (err, result) {
-      console.log('first guess', result);
-    });
-  bcrypt.compare("veggies",
-    "$2b$10$pXtoZ2g.MbkzpInNvJdgY.bP0WWwxZEcJIC0BFvbVEnhzB4gkHayW",
-    function (err, result) {
-      console.log('second guess', result);
-    });
-  if (req.body.email === database.users[0].email &&
-    req.body.password === database.users[0].password) {
-    res.json(database.users[0]);
-  } else {
-    res.status(400).json('error loggin in');
-  }
+  db.select('email', 'hash').from('login')
+    .where('email', '=', req.body.email)
+    .then(data => {
+      const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
+      if (isValid) {
+        return db.select('*').from('users')
+          .where('email', '=', req.body.email)
+          .then(user => {
+            res.json(user[0])
+          })
+          .catch(err => res.status(400).json('unable to get user'))
+      } else {
+        res.status(400).json('wrong credentials');
+      }
+    })
+    .catch(err => status(400).json('wrong credentials'))
 })
 
 app.post('/register', (req, res) => {

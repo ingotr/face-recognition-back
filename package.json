@@ -1,10 +1,13 @@
 {
   "name": "node",
   "version": "1.0.0",
-  "main": "script.js",
+  "main": "src/server.js",
+
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "eslint": "npx eslint --ext .js src/**"
   },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -14,10 +17,13 @@
     "clarifai": "^2.9.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "helmet": "^3.23.2",
     "knex": "^0.21.1",
     "pg": "^8.2.1"
   },
   "devDependencies": {
+    "eslint": "^7.3.1",
+    "eslint-plugin-node": "^11.1.0",
     "nodemon": "^2.0.4"
   },
   "description": ""

@@ -11,7 +11,7 @@ const handleApiCall = (req, res) => {
     .then(data => {
       res.json(data);
     })
-    .catch(err => res.status(400).json('unable to work with API'))
+    .catch(err => res.status(400).json('unable to work with API', err))
 }
 
 const handleImage = (req, res, db) => {
@@ -22,7 +22,7 @@ const handleImage = (req, res, db) => {
     .then(entries => {
       res.json(entries[0]);
     })
-    .catch(err => res.status(400).json('unable to get entries'))
+    .catch(err => res.status(400).json('unable to get entries', err))
 }
 
 module.exports = {

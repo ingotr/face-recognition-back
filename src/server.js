@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 const knex = require('knex');
+const helmet = require('helmet');
 
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
@@ -14,6 +15,7 @@ const saltRounds = 10;
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+app.use(helmet());
 
 const db = knex({
   client: 'pg',
@@ -26,7 +28,7 @@ const db = knex({
 });
 
 app.get('/', (req, res) => {
-  res.send(database.users);
+  res.send(db.users);
 });
 
 app.post('/signin', (req,res) => {
